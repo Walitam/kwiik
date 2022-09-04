@@ -1,5 +1,9 @@
 // kwiik
 // by walitam & h912 - do anything you want, just credit us please
+/* versions:
+done 0.1 : technical test
+upcoming 0.2 : buildings alpha (ex : press) 
+*/
 
 $body = $("body");
 

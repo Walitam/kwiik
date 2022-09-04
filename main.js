@@ -1,88 +1,125 @@
 // kwiik
+// by walitam & h912 - do anything you want, just credit us please
 
-// define basic vars
-var kiwis = 0;
-var pressCount = 0;
-var pressPrice = 25;
-var lds = localDataStorage("kwiikStorage");
-var kiwiCounter = document.getElementById("kiwiCounter");
-var pressCounter = document.getElementById("pressCounter");
-var kiwiPressUnlocked = false;
-var makeKiwiButton = document.getElementById('makeKiwiButton');
-var kiwiPressButton = document.getElementById('kiwiPressButton');
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function() { $body.addClass("loading");    },
+     ajaxStop: function() { $body.removeClass("loading"); }    
+});
+
+// define variables
+let kiwis = 0;
+let defaultKiwiMakeCount = 1;
+let kiwiMakeCount = 1;
+let pressCount = 0;
+let pressPrice = 250;
+let lds = localDataStorage("kwiikStorage");
+let kiwiCounter = document.getElementById("kiwiCounter");
+let kiwiCounterText = document.getElementById("kiwiCounterText");
+let pressCounter = document.getElementById("pressCounter");
+let pressCounterText = document.getElementById("pressCounterText");
+let makeKiwiButton = document.getElementById('makeKiwiButton');
+let kiwiPressButton = document.getElementById('kiwiPressButton');
 
 // start logic
 
 window.onload = () => {
-    console.log("loading script");
-
     if (isNaN(lds.get('kiwis'))){
         lds.set('kiwis', 0);
     }
     kiwis = lds.get("kiwis");
-    kiwiPressUnlocked = lds.get("kiwiPressUnlocked");
     pressCount = lds.get("pressCount");
+    pressPrice = lds.get("pressPrice");
 
-    kiwiCounter.innerHTML = `${kiwis} kiwis`;
+    makeKiwiButton.innerHTML = `make kiwi (${kiwiMakeCount})`;
+    kiwiCounterText.innerHTML = `${kiwis} kiwis`;
+
+    pressCounterText.innerHTML = `${pressCount} presses`;
+
+    let pressToAdd = pressCount;
+    while(pressToAdd > 0){
+        pressToAdd--
+        let btn = document.createElement("button");
+        btn.innerHTML = "Press";
+        btn.name = "PRESS";
+        btn.className = "PressStyle";
+        document.body.appendChild(btn);
+    }
 };
 
 // click kiwi function
 function makeKiwi() {
     console.log("kiwi made");
-    kiwis+=1;
+    kiwis+=kiwiMakeCount;
     console.log(kiwis);
-    kiwiCounter.innerHTML = `${kiwis} kiwis`;
+    kiwiCounterText.innerHTML = `${kiwis} kiwis`;
 }
 
+// runs when you buy a press
 function buyPress() {
     if (kiwis - pressPrice >= 0){
-        kiwis -= 25;
+        kiwis -= pressPrice;
         pressCount += 1;
         console.log("press bought");
-        kiwiCounter.innerHTML = `${kiwis} kiwis`;
-        pressCount.innerHTML = `${pressCount} press`;
+        console.log(pressCount + "press")
+        kiwiCounterText.innerHTML = `${kiwis} kiwis`;
+        pressCounterText.innerHTML = `${pressCount} presses`;
+        // create the button when buyPress clicked
+        let btn = document.createElement("button");
+        btn.innerHTML = "Press";
+        btn.name = "PRESS";
+        btn.className = "PressStyle";
+        // append in the html document
+        document.body.appendChild(btn);
+        if (pressCount > 0) {
+            kiwiMakeCount = kiwiMakeCount + pressCount;
+        }
     } else {
         alert("you cannot buy a press rn");
     }
-}
+} 
 
 // reset kiwi function
-function resetKiwis(){
+function resetSave(){
     lds.clear();
     kiwis = 0;
-    kiwiCounter.innerHTML = `${kiwis} kiwis`;
+    pressCount = 0;
+    kiwiMakeCount = 1;
+    kiwiCounterText.innerHTML = `${kiwis} kiwis`;
+    pressCounterText.innerHTML = `${pressCount} press`;
+    $('.PressStyle').remove();
 }
 
-//check every second
+// makes presses show
+function createButton(){
+    var createButton = document.createElement('BUTTON');
+    var buttonText = document.createTextNode('Press');
+    createButton.appendChild(text);
+    document.getElementById('createButton').style.border = "rgb(0, 138, 185) solid 5px";
+    document.getElementById('createButton').style.color = "rgb(43, 150, 87)";
+    document.getElementById('createButton').style.opacity = "100%";
+}
+
+//check every second (will probably begin to be extremely laggy in the future sorry)
 setInterval(function(){ 
     // click upgrades unlock check
-    if (kiwis > 24) {
-        console.log("25 or more");
-        kiwiPressUnlocked = true;
+    if (kiwis > 249) {
         document.getElementById('kiwiPressButton').style.border = "rgb(0, 138, 185) solid 5px";
         document.getElementById('kiwiPressButton').style.color = "rgb(43, 150, 87)";
         document.getElementById('kiwiPressButton').style.opacity = "100%";
     } else {
-        console.log("24 or less");
-        kiwiPressUnlocked = false;
         document.getElementById('kiwiPressButton').style.border = "rgb(80, 80, 80) solid 5px";
         document.getElementById('kiwiPressButton').style.color = "rgb(75, 75, 75)";
         document.getElementById('kiwiPressButton').style.opacity = "0.5";
     }
+
+    
 }, 1000);
-
-if(kiwiPressUnlocked == true){
-    document.getElementById('kiwiPressButton').style.border = "rgb(43, 150, 87)";
-    document.getElementById('kiwiPressButton').style.color = "rgb(43, 150, 87)";
-    document.getElementById('kiwiPressButton').style.opacity = "100%";
-    document.getElementById('kiwiPressButton').style.padding = "1%";
-}
-
-console.log("script loaded");
 
 // before quitting
 window.onbeforeunload = () => {
     lds.set("kiwis", kiwis);
-    lds.set("kiwiPressUnlocked", kiwiPressUnlocked);
     lds.set("pressCount", pressCount);
+    lds.set("pressPrice", pressPrice);
 };

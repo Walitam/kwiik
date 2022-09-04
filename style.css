@@ -4,6 +4,8 @@ body {
     margin-left: 2%;
     animation: fade 1.5s;
 }
+.page_loader{display:table; width:100%;height:100%;position:absolute;top:0;left:0;}
+#inner{display:table-cell;width:100%;height:100%;height:100vh;vertical-align:middle;}
 .heading {
     font-family: Roboto Slab;
     color: rgb(255, 255, 255);
@@ -39,10 +41,33 @@ body {
     color:  rgb(43, 150, 87);
     box-sizing: border-box;
     min-width: 150px;
+    animation: bounce 1s infinite alternate;
 }
 .button:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-    width: 12%;
+    
+}
+.button:active {
+    animation: clickiwi 1s infinite alternate;
+}
+@keyframes clickiwi {
+    0% {
+        transform: scale(1.1, 1.1);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+@keyframes bounce {
+    0%{
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+        transform: scale(1.1, 1.1);
+    }
+    100% {
+        box-shadow: 0 12px 16px 0 rgb(46, 131, 88),0 17px 50px 0 rgb(69, 143, 66)
+
+        transform: scale(1, 1);
+    }
 }
 .clickupgrades {
     font-family: Roboto Slab;
@@ -59,7 +84,6 @@ body {
 }
 .clickupgrades:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-    width: 12%;
 }
 .buttonreset {
     font-family: Roboto Slab;
@@ -75,9 +99,54 @@ body {
     bottom: 3em;
     min-width: 150px;
 }
+.PressStyle {
+    font-family: Roboto Slab;
+    text-align: center;
+    font-size: 100%;
+    margin-bottom: 0.3rem;
+    padding: 1.5em;
+    width: 10%;
+    display: inline-block;
+    transition: 0.3s;
+    border: rgb(92, 92, 92) solid 5px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    color:  rgb(43, 150, 87);
+    box-sizing: border-box;
+    min-width: 150px;
+}
 .buttonreset:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
     width: 12%;
+}
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+   .modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba(255, 255, 255, 0.8) 
+                url('loading.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
 }
 @media screen (max-width:600px){
     .button {

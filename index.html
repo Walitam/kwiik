@@ -10,6 +10,10 @@
     src="https://cdn.jsdelivr.net/gh/macmcmeans/localDataStorage@master/localDataStorage-3.0.0.min.js" 
     integrity="sha512-dEhk3bL90qpWkcHCJDErHbZEY7hGc4ozmKss33HSjwMeSBKBtiw/XVIE7tb5u+iOEp6dTIR9sCWW7J3txeTQIw==" 
     crossorigin="anonymous"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous"></script>
     <title>kwiik</title>
 </head>
 <body>
@@ -17,19 +21,20 @@
         <h1>kwiik</h1>
     </div>
     <button class="button" id=makeKiwiButton onclick="makeKiwi()">make kiwi (1)</button>
-    <button class="clickupgrades" id=kiwiPressButton onclick="buyPress()">buy press (25)</button>
+    <button class="clickupgrades" id=kiwiPressButton onclick="buyPress()">buy press (250)</button>
     <div class="counter" id="kiwiCounter">
-        <h3 >{} kiwis</h3>
+        <h3 id="kiwiCounterText">{} kiwis</h3>
     </div>
     <div class="counter" id="pressCounter">
-        <h3 >{} kiwis</h3>
+        <h3 id="pressCounterText">{} kiwis</h3>
     </div>
+    <div class="modal"><!-- Place at bottom of page --></div>
     <script src="./main.js"></script>
 </body>
 <footer>
     <div class="footer">
         <p>By Walitam & h912 - 2022</p>
     </div>
-    <button class="buttonreset" id=resetKiwisButton onclick="resetKiwis()">reset save</button>
+    <button class="buttonreset" id=resetKiwisButton onclick="resetSave()">reset save</button>
 </footer>
 </html>

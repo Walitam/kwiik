@@ -2,7 +2,8 @@
 // by walitam & h912 - do anything you want, just credit us please
 /* versions:
 done 0.1 : technical test
-upcoming 0.2 : buildings alpha (ex : press) 
+done 0.2 : buildings alpha (ex : press) 
+upcoming 0.3 : auto-kiwi generator
 */
 
 $body = $("body");
@@ -13,6 +14,7 @@ $(document).on({
 });
 
 // define variables
+let saveMade = false;
 let kiwis = 0;
 let defaultKiwiMakeCount = 1;
 let kiwiMakeCount = 1;
@@ -27,12 +29,13 @@ let makeKiwiButton = document.getElementById('makeKiwiButton');
 let kiwiPressButton = document.getElementById('kiwiPressButton');
 
 // start logic
-
 window.onload = () => {
     if (isNaN(lds.get('kiwis'))){
         lds.set('kiwis', 0);
     }
+    saveMade = lds.get("saveMade");
     kiwis = lds.get("kiwis");
+    kiwiMakeCount = lds.get("kiwiMakeCount");
     pressCount = lds.get("pressCount");
     pressPrice = lds.get("pressPrice");
 
@@ -43,7 +46,7 @@ window.onload = () => {
 
     let pressToAdd = pressCount;
     while(pressToAdd > 0){
-        pressToAdd--
+        pressToAdd--;
         let btn = document.createElement("button");
         btn.innerHTML = "Press";
         btn.name = "PRESS";
@@ -54,9 +57,7 @@ window.onload = () => {
 
 // click kiwi function
 function makeKiwi() {
-    console.log("kiwi made");
     kiwis+=kiwiMakeCount;
-    console.log(kiwis);
     kiwiCounterText.innerHTML = `${kiwis} kiwis`;
 }
 
@@ -66,7 +67,7 @@ function buyPress() {
         kiwis -= pressPrice;
         pressCount += 1;
         console.log("press bought");
-        console.log(pressCount + "press")
+        console.log(pressCount + "press");
         kiwiCounterText.innerHTML = `${kiwis} kiwis`;
         pressCounterText.innerHTML = `${pressCount} presses`;
         // create the button when buyPress clicked
@@ -74,24 +75,33 @@ function buyPress() {
         btn.innerHTML = "Press";
         btn.name = "PRESS";
         btn.className = "PressStyle";
-        // append in the html document
+        // add press to html
         document.body.appendChild(btn);
         if (pressCount > 0) {
-            kiwiMakeCount = kiwiMakeCount + pressCount;
+            kiwiMakeCount = defaultKiwiMakeCount + pressCount;
+            document.getElementById("makeKiwiButton").innerHTML = `make kiwi (${kiwiMakeCount})`;
         }
+        // calculate new pressPrice and flatten it
+        pressPrice = Math.floor(pressPrice * 1.2);
+        document.getElementById("kiwiPressButton").innerHTML = `buy press (${pressPrice})`;
     } else {
-        alert("you cannot buy a press rn");
+        let missingKiwis = pressPrice - kiwis;
+        alert(`You don't have enough kiwis (missing ${missingKiwis} kiwis)`);
     }
-} 
+}
 
 // reset kiwi function
 function resetSave(){
     lds.clear();
+    saveMade = false;
     kiwis = 0;
     pressCount = 0;
+    pressPrice = 250;
     kiwiMakeCount = 1;
     kiwiCounterText.innerHTML = `${kiwis} kiwis`;
     pressCounterText.innerHTML = `${pressCount} press`;
+    makeKiwiButton.innerHTML = `make kiwi (${kiwiMakeCount})`;
+    kiwiPressButton.innerHTML = `buy press (${pressPrice})`;
     $('.PressStyle').remove();
 }
 
@@ -105,10 +115,30 @@ function createButton(){
     document.getElementById('createButton').style.opacity = "100%";
 }
 
+// debug functions don't touch
+function getSaveMade(){
+    console.log(saveMade);
+}
+function getKiwis(){
+    console.log(kiwis);
+}
+function getDefaultKiwiMakeCount(){
+    console.log(defaultKiwiMakeCount);
+}
+function getKiwiMakeCount(){
+    console.log(kiwiMakeCount);
+}
+function getPressCount(){
+    console.log(pressCount);
+}
+function getPressPrice(){
+    console.log(pressPrice);
+}
+
 //check every second (will probably begin to be extremely laggy in the future sorry)
 setInterval(function(){ 
     // click upgrades unlock check
-    if (kiwis > 249) {
+    if (kiwis > pressPrice - 1) {
         document.getElementById('kiwiPressButton').style.border = "rgb(0, 138, 185) solid 5px";
         document.getElementById('kiwiPressButton').style.color = "rgb(43, 150, 87)";
         document.getElementById('kiwiPressButton').style.opacity = "100%";
@@ -123,7 +153,10 @@ setInterval(function(){
 
 // before quitting
 window.onbeforeunload = () => {
+    saveMade = true;
+    lds.set("saveMade", saveMade);
     lds.set("kiwis", kiwis);
+    lds.set("kiwiMakeCount", kiwiMakeCount);
     lds.set("pressCount", pressCount);
     lds.set("pressPrice", pressPrice);
 };

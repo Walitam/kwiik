@@ -20,11 +20,16 @@ let defaultKiwiMakeCount = 1;
 let kiwiMakeCount = 1;
 let pressCount = 0;
 let pressPrice = 250;
+let extractorCount = 0;
+let extractorMakeCount = 5;
+let extractorPrice = 15000;
 let lds = localDataStorage("kwiikStorage");
 let kiwiCounter = document.getElementById("kiwiCounter");
 let kiwiCounterText = document.getElementById("kiwiCounterText");
 let pressCounter = document.getElementById("pressCounter");
 let pressCounterText = document.getElementById("pressCounterText");
+let extractorCounter = document.getElementById("extractorCounter");
+let extractorCounterText = document.getElementById("extractorCounterText");
 let makeKiwiButton = document.getElementById('makeKiwiButton');
 let kiwiPressButton = document.getElementById('kiwiPressButton');
 
@@ -38,11 +43,14 @@ window.onload = () => {
     kiwiMakeCount = lds.get("kiwiMakeCount");
     pressCount = lds.get("pressCount");
     pressPrice = lds.get("pressPrice");
+    extractorCount = lds.get("extractorCount");
+    extractorMakeCount = lds.get("extractorMakeCount");
+    extractorPrice = lds.get("extractorPrice");
 
     makeKiwiButton.innerHTML = `make kiwi (${kiwiMakeCount})`;
     kiwiCounterText.innerHTML = `${kiwis} kiwis`;
-
     pressCounterText.innerHTML = `${pressCount} presses`;
+    extractorCounterText.innerHTML = `${extractorCount} extractors`;
 
     let pressToAdd = pressCount;
     while(pressToAdd > 0){
@@ -52,6 +60,11 @@ window.onload = () => {
         btn.name = "PRESS";
         btn.className = "PressStyle";
         document.body.appendChild(btn);
+    }
+
+    if (saveMade == false) {
+        kiwiCounterText.innerHTML = `${kiwis} kiwis`;
+        pressCounterText.innerHTML = `${pressCount} presses`;
     }
 };
 
@@ -90,6 +103,20 @@ function buyPress() {
     }
 }
 
+function buyExtractor(){
+    if (kiwis - extractorPrice >= 0){
+        kiwis -= extractorPrice;
+        extractorCount += 1;
+        console.log("extractor bought");
+        console.log(extractorCount + "extractor");
+        kiwiCounterText.innerHTML = `${kiwis} kiwis`;
+        extractorCounterText.innerHTML = `${extractorCount} extractors`;
+    } else {
+        let missingKiwis = pressPrice - kiwis;
+        alert(`You don't have enough kiwis (missing ${missingKiwis} kiwis)`);
+    }
+}
+
 // reset kiwi function
 function resetSave(){
     lds.clear();
@@ -98,8 +125,12 @@ function resetSave(){
     pressCount = 0;
     pressPrice = 250;
     kiwiMakeCount = 1;
+    extractorPrice = 15000;
+    extractorCount = 0;
+    extractorMakeCount = 5;
     kiwiCounterText.innerHTML = `${kiwis} kiwis`;
     pressCounterText.innerHTML = `${pressCount} press`;
+    extractorCounterText.innerHTML = `${extractorCount} extractors`;
     makeKiwiButton.innerHTML = `make kiwi (${kiwiMakeCount})`;
     kiwiPressButton.innerHTML = `buy press (${pressPrice})`;
     $('.PressStyle').remove();
@@ -147,8 +178,20 @@ setInterval(function(){
         document.getElementById('kiwiPressButton').style.color = "rgb(75, 75, 75)";
         document.getElementById('kiwiPressButton').style.opacity = "0.5";
     }
-
     
+    if (kiwis > extractorPrice - 1) {
+        document.getElementById('buyExtractorButton').style.border = "rgb(102, 0, 255) solid 5px";
+        document.getElementById('buyExtractorButton').style.color = "rgb(153, 51, 255)";
+        document.getElementById('buyExtractorButton').style.opacity = "100%";
+    } else {
+        document.getElementById('buyExtractorButton').style.border = "rgb(80, 80, 80) solid 5px";
+        document.getElementById('buyExtractorButton').style.color = "rgb(75, 75, 75)";
+        document.getElementById('buyExtractorButton').style.opacity = "0.5";
+    }
+    if (extractorCount > 0) {
+        kiwis = kiwis + extractorMakeCount * extractorCount;
+        kiwiCounterText.innerHTML = `${kiwis} kiwis`;
+    }
 }, 1000);
 
 // before quitting
@@ -159,4 +202,7 @@ window.onbeforeunload = () => {
     lds.set("kiwiMakeCount", kiwiMakeCount);
     lds.set("pressCount", pressCount);
     lds.set("pressPrice", pressPrice);
+    lds.set("extractorCount", extractorCount);
+    lds.set("extractorMakeCount", extractorMakeCount);
+    lds.set("extractorPrice", extractorPrice);
 };

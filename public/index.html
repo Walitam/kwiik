@@ -22,14 +22,41 @@
     </div>
     <button class="button" id=makeKiwiButton onclick="makeKiwi()">make kiwi (1)</button>
     <button class="clickupgrades" id=kiwiPressButton onclick="buyPress()">buy press (250)</button>
+    <button class="clickupgrades" id=buyExtractorButton onclick="buyExtractor()">buy extractor (15000)</button>
     <div class="counter" id="kiwiCounter">
         <h3 id="kiwiCounterText">{} kiwis</h3>
     </div>
     <div class="counter" id="pressCounter">
-        <h3 id="pressCounterText">{} kiwis</h3>
+        <h3 id="pressCounterText">{} presses</h3>
+    </div>
+    <div class="counter" id="extractorCounter">
+        <h3 id="extractorCounterText">{} extractors</h3>
     </div>
     <div class="modal"><!-- Place at bottom of page --></div>
     <script src="./main.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyCD8kuLPpXGOWVUh-qlst_nlIMEmWGmxHw",
+          authDomain: "kwiikgame.firebaseapp.com",
+          projectId: "kwiikgame",
+          storageBucket: "kwiikgame.appspot.com",
+          messagingSenderId: "239322305486",
+          appId: "1:239322305486:web:257e24816908881e0e519f",
+          measurementId: "G-WR5EKYV9NV"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+      </script>
 </body>
 <footer>
     <div class="footer">

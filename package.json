@@ -1,0 +1,23 @@
+{
+  "name": "kwiik",
+  "version": "1.0.0",
+  "description": "- [ ] fix not being able to purchase press",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Walitam/kwiik.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Walitam/kwiik/issues"
+  },
+  "homepage": "https://github.com/Walitam/kwiik#readme",
+  "devDependencies": {
+    "eslint": "^8.23.0",
+    "eslint-plugin-react": "^7.31.7"
+  }
+}
